@@ -5,6 +5,8 @@ import com.example.practice.usercrud.data.dto.request.UserUpdateRequest;
 import com.example.practice.usercrud.data.dto.response.UserResponse;
 import com.example.practice.usercrud.service.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -52,6 +54,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/users")
+@Slf4j  // Add this if using Lombok
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -87,7 +90,7 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody @NonNull UserRequest userRequest) {
-        logger.info("Creating new user with email: {}", userRequest.getEmail());
+        log.info("Creating user - email: {}, username: {}", userRequest.getEmail(), userRequest.getUsername());
         UserResponse userResponse = userService.createUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
@@ -111,7 +114,8 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable @NonNull Long id) {
-        logger.debug("Retrieving user by ID: {}", id);
+        //logger.debug("Retrieving user by ID: {}", id);
+        log.debug("Retrieving user by ID: {}", id);
         UserResponse userResponse = userService.getUserById(id);
         return ResponseEntity.ok(userResponse);
     }
@@ -131,7 +135,8 @@ public class UserController {
      */
     @GetMapping("/email/{email}")
     public ResponseEntity<UserResponse> getUserByEmail(@PathVariable @NonNull String email) {
-        logger.debug("Retrieving user by email: {}", email);
+        //logger.debug("Retrieving user by email: {}", email);
+        log.debug("Retrieving user by email: {}", email);
         UserResponse userResponse = userService.getUserByEmail(email);
         return ResponseEntity.ok(userResponse);
     }
@@ -231,7 +236,8 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable @NonNull Long id,
             @Valid @RequestBody @NonNull UserUpdateRequest userUpdateRequest) {
-        logger.info("Updating user with ID: {}", id);
+        //logger.info("Updating user with ID: {}", id);
+        log.info("Updating user - id: {}, email: {}, username: {}", id, userUpdateRequest.getEmail(), userUpdateRequest.getUsername());
         UserResponse userResponse = userService.updateUser(id, userUpdateRequest);
         return ResponseEntity.ok(userResponse);
     }
@@ -258,7 +264,8 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable @NonNull Long id) {
-        logger.info("Deleting user with ID: {}", id);
+        //logger.info("Deleting user with ID: {}", id);
+        log.info("Deleting user - id: {}", id);
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
